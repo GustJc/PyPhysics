@@ -24,6 +24,14 @@ class vector2():
       r.y += vec
     return r
 
+  def __div__(self, number):
+    return vector2(self.x/number, self.y/number)
+
+  def __idiv__(self, number):
+    self.x /= number
+    self.y /= number
+    return self
+
   def __str__(self):
     return "vector2(x: {0}, y: {1})".format(self.x, self.y)
 
@@ -74,6 +82,15 @@ class vector3():
       r.y -= vec
       r.z -= vec
     return r
+
+  def __div__(self, number):
+    return vector3(self.x/number, self.y/number, self.z/number)
+
+  def __idiv__(self, number):
+    self.x /= number
+    self.y /= number
+    self.z /= number
+    return self
 
   def __str__(self):
     return "vector3(x: {0}, y: {1}, z: {2})".format(self.x, self.y, self.z)

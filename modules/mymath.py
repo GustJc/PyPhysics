@@ -7,11 +7,11 @@ class vector2():
   def __add__(self, vec):
     r = vector2(self.x, self.y)
     if isinstance(vec, self.__class__):
-      r.x -= vec.x
-      r.y -= vec.y
+      r.x += vec.x
+      r.y += vec.y
     else:
-      r.x -= vec
-      r.y -= vec
+      r.x += vec
+      r.y += vec
     return r
 
   def __sub__(self, vec):
@@ -20,12 +20,21 @@ class vector2():
       r.x -= vec.x
       r.y -= vec.y
     else:
-      r.x += vec
-      r.y += vec
+      r.x -= vec
+      r.y -= vec
     return r
 
-  def __div__(self, number):
-    return vector2(self.x/number, self.y/number)
+  def __mul__(self, vec):
+    if isinstance(vec, self.__class__):
+      return vector2(self.x*vec.x, self.y*vec.y)
+    else:
+      return vector2(self.x*vec, self.y*vec)
+
+  def __div__(self, vec):
+    if isinstance(vec, self.__class__):
+      return vector2(self.x/vec.x, self.y/vec.y)
+    else:
+      return vector2(self.x/vec, self.y/vec)
 
   def __idiv__(self, number):
     self.x /= number
@@ -83,8 +92,17 @@ class vector3():
       r.z -= vec
     return r
 
-  def __div__(self, number):
-    return vector3(self.x/number, self.y/number, self.z/number)
+  def __mul__(self, vec):
+    if isinstance(vec, self.__class__):
+      return vector3(self.x*vec.x, self.y*vec.y, self.y*vec.z)
+    else:
+      return vector3(self.x*vec, self.y*vec, self.y*vec)
+
+  def __div__(self, vec):
+    if isinstance(vec, self.__class__):
+      return vector3(self.x/vec.x, self.y/vec.y, self.z/vec.y)
+    else:
+      return vector3(self.x/vec, self.y/vec, self.z/vec)
 
   def __idiv__(self, number):
     self.x /= number

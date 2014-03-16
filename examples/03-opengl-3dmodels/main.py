@@ -16,7 +16,35 @@ useCube = False
 texture = 0
 lightpos = [0,0]
 use_dl = True
+show_fps = True
 rotateAngle = 0.0
+
+renderCalls = [GL_TRIANGLES, GL_LINE_STRIP, GL_LINES, GL_LINE_LOOP, GL_POINTS, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON]
+call_id = 0
+def printRenderName(id):
+  if id == 0:
+    print "Using GL_TRIANGLES"
+  elif id == 1:
+    print "Using GL_LINE_STRIP"
+  elif id == 2:
+    print "Using GL_LINES"
+  elif id == 3:
+    print "Using GL_LINE_LOOP"
+  elif id == 4:
+    print "Using GL_POINTS"
+  elif id == 5:
+    print "Using GL_TRIANGLE_STRIP"
+  elif id == 6:
+    print "Using GL_TRIANGLE_FAN"
+  elif id == 7:
+    print "Using GL_QUADS"
+  elif id == 8:
+    print "Using GL_QUAD_STRIP"
+  elif id == 9:
+    print "Using GL_POLYGON"
+  else:
+    print "Not found"
+
 
 #From http://www.nandnor.net/?p=86, changed to support .obj with no normals without crashing
 def loadOBJ(filename):
@@ -44,7 +72,7 @@ def loadOBJ(filename):
   return vertsOut, normsOut
 
 def drawOBJ(verts, norms):
-  glBegin(GL_TRIANGLES)
+  glBegin(renderCalls[call_id])
 
   for normal, vert in enumerate(verts):
     glNormal3fv(norms[normal])
@@ -52,8 +80,12 @@ def drawOBJ(verts, norms):
 
   glEnd()
 
-def createDL(verts,norms):
-  drawlist = glGenLists(1); 
+def createDL(verts,norms, forcedraw=None):
+  drawlist = 0
+  if not forcedraw:
+    drawlist = glGenLists(1);
+  else:
+    drawlist = forcedraw
 
   glNewList(drawlist, GL_COMPILE)
 
@@ -84,7 +116,7 @@ def resize_gl_screen(size):
   OpenGL.GL.glLoadIdentity()
 
 def init_gl():
-  OpenGL.GL.glShadeModel(GL_FLAT)
+  OpenGL.GL.glShadeModel(GL_SMOOTH)
   OpenGL.GL.glClearColor(0.3, 0.3, 0.3, 0.0)
   OpenGL.GL.glClearDepth(1.0)
   glEnable(GL_DEPTH_TEST)
@@ -108,7 +140,7 @@ def draw_gl_scene():
   OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
   OpenGL.GL.glLoadIdentity()
 
-  glColor3f(1,1,1)
+  glColor3f(0.5,0.5,1)
   glPushMatrix()
   glTranslate(0,0,-5)
   global rotateAngle
@@ -194,6 +226,31 @@ def main():
         elif event.key == pygame.K_h:
           global useCube
           useCube = not useCube
+        #change drawing mode
+        elif event.key == pygame.K_a:
+          global call_id
+          call_id-=1
+          if call_id < 0:
+            call_id = len(renderCalls)-1
+          createDL(verts2, norms2, drawing_list)
+          createDL(verts, norms, drawing_cube)
+          printRenderName(call_id)
+        elif event.key == pygame.K_d:
+          call_id+=1
+          if call_id > len(renderCalls)-1:
+            call_id = 0
+          createDL(verts2, norms2, drawing_list)
+          createDL(verts, norms, drawing_cube)
+          printRenderName(call_id)
+          #reset to triangle
+        elif event.key == pygame.K_s:
+          call_id=0
+          createDL(verts2, norms2, drawing_list)
+          createDL(verts, norms, drawing_cube)
+          printRenderName(call_id)
+        elif event.key == pygame.K_f:
+          global show_fps
+          show_fps = not show_fps
 
     #update rotation
     angle += elapsed_time*0.1
@@ -217,8 +274,9 @@ def main():
       triangles = len(verts2)
       if useCube:
         triangles += len(verts)
-      print("Triangles: ", triangles )
-      print("FPS: ", fps)
+      if show_fps:
+        print("Triangles: ", triangles )
+        print("FPS: ", fps)
       fps = 0
 
   glDeleteLists(drawing_list, 1)

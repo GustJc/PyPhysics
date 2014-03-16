@@ -16,6 +16,13 @@ The code is used and tested with python 2.7.
 -Python 2.7
 
 Some code using graphical representation may depend on:
+
 -pygame 2.9.1 (may work with order versions)
+
+-pyopengl
+
+pyopengl can be obtained with pip
+
+`sudo pip install pyopengl`
 
 

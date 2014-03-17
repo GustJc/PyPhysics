@@ -9,7 +9,7 @@ from OpenGL.GLUT import *
 import math
 import pygame
 
-position = [0,0,-10]
+position = [0,0,0]
 wired = True
 instructions = True
 useCube = False
@@ -143,6 +143,7 @@ def draw_gl_scene():
   glColor3f(0.5,0.5,1)
   glPushMatrix()
   glTranslate(0,0,-5)
+  glTranslate(position[0],position[1],position[2])
   global rotateAngle
   glRotatef(rotateAngle,0,1,0)
 

@@ -1,4 +1,5 @@
 import math
+
 class vector2():
   def __init__(self, x,y):
     self.x = x
@@ -36,6 +37,15 @@ class vector2():
     else:
       return vector2(self.x/vec, self.y/vec)
 
+  def __iadd__(self, vec):
+    if isinstance(vec, self.__class__):
+      self.x += vec.x
+      self.y += vec.y
+    else:
+      self.x += vec
+      self.y += vec
+    return self
+
   def __idiv__(self, number):
     self.x /= number
     self.y /= number
@@ -50,6 +60,7 @@ class vector2():
       return self.x*vec.y - self.y*vec.y
     else:
       raise("Object is not a vector2")
+  
   def dot(self, vec):
     if isinstance(vec, self.__class__):
       return vec.x * self.x + vec.y * self.y
@@ -58,6 +69,16 @@ class vector2():
 
   def mod(self):
     return math.sqrt( self.x**2 + self.y**2 )
+
+  def get_unit(self):
+    return self / self.mod()
+
+  def projection(self, vec):
+    return (self.dot(vec) / vec.mod())
+
+  def projection_vector(self, vec):
+    return vec.get_unit() * self.projection(vec)
+
 
 
 # vector3 - 3d Vector 
@@ -134,3 +155,6 @@ class vector3():
 
   def mod(self):
     return math.sqrt( self.x**2 + self.y**2 + self.z**2 )
+
+  def get_unit(self):
+    return self / self.mod()

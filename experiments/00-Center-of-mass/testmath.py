@@ -20,3 +20,8 @@ print c
 
 print 'mod(c): ', c.mod()
 print 'mod(b): ', b.mod()
+
+print  'unit(b): ', b.get_unit()
+
+print  'projection(b em c): ', b.projection(c)
+print  'projection vector(b em c): ', b.projection_vector(c)

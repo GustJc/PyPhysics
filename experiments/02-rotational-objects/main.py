@@ -6,7 +6,6 @@ from gameobject import *
 
 import pygame.gfxdraw
 import pygame
-import math
 
 show_collisions = False
 show_text = True
@@ -18,9 +17,6 @@ class App():
     self._running = True
     self._display_surf = None
     self.size = self.width, self.weight = 640, 480
-    self.angle = 45.0
-    self.initial_speed = 350.0
-    self.ball_sprite = None
 
   def on_init(self):
     pygame.init()
@@ -29,10 +25,11 @@ class App():
     image = pygame.image.load("ball.png")
     image = image.convert_alpha()
 
-    self.ball_sprite = gameobject(50, 92, image, ball_group)
-    self.ball_sprite.rect = self.ball_sprite.image.get_rect()
-    self.ball_sprite.set_hitbox(10, 10, -20, -20)
-    self.ball_sprite.body.mass = 1.0
+    ball_sprite = gameobject(50, 92, image, ball_group)
+    ball_sprite.rect = ball_sprite.image.get_rect()
+    ball_sprite.set_hitbox(10, 10, -20, -20)
+    ball_sprite.body.mass = 1.0
+
 
     red_ball = gameobject(200,92, image.copy() )
     red_ball.image.fill((80,0,0,127), (red_ball.rect), pygame.BLEND_RGB_ADD)
@@ -40,6 +37,11 @@ class App():
     red_ball.body.mass = 1.1
 
     ball_group.add(red_ball)
+
+    bigball_sprite = gameobject(220, -20, pygame.transform.scale(image, (200,200) ), ball_group)
+    bigball_sprite.rect = bigball_sprite.image.get_rect()
+    bigball_sprite.set_hitbox(25, 25, -50, -50)
+    bigball_sprite.body.mass = 1.5
 
     #Font
     myfont = pygame.font.SysFont("monospace", 16)
@@ -56,14 +58,6 @@ class App():
       if event.key == pygame.K_t:
         global show_text
         show_text = not show_text
-      if event.key == pygame.K_l:
-        vec = vector2(self.initial_speed * math.cos(math.radians(self.angle)), self.initial_speed * -math.sin(math.radians(self.angle)))
-        self.ball_sprite.body.speed += vec
-      if event.key == pygame.K_w:
-        self.angle += 20
-      if event.key == pygame.K_s:
-        self.angle -= 20
-        
 
   def on_update(self, seconds):
     #async events if needed:
@@ -85,11 +79,6 @@ class App():
     global show_text
     if show_text:
       self._display_surf.blit(tx_instruction, (5, 5) )
-
-    pygame.gfxdraw.line(self._display_surf, (int)(self.ball_sprite.body.position.x), (int)(self.ball_sprite.body.position.y), 
-                        (int)(self.ball_sprite.body.position.x+math.cos(math.radians(self.angle))*50), 
-                        (int)(self.ball_sprite.body.position.y+-math.sin(math.radians(self.angle))*50), (255,0,0))
-    
 
 
   def on_cleanup(self):

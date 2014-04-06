@@ -158,3 +158,40 @@ class vector3():
 
   def get_unit(self):
     return self / self.mod()
+
+#--------------- Classe Matrix
+class Matrix():
+  def __init__(self, valores):
+    self.M = valores;
+
+  def __add__(self, value):
+    N = self.M
+    for i in range(3):
+      for j in range(3):
+        N[i][j] += value
+
+    return N
+
+  def __iadd__(self, value):
+    for i in range(3):
+      for j in range(3):
+        self.M[i][j] += value
+
+    return self
+
+  def __sub__(self, value):
+    N = self.M
+    for i in range(3):
+      for j in range(3):
+        N[i][j] -= value
+
+    return N
+
+  def __isub__(self, value):
+    for i in range(3):
+      for j in range(3):
+        self.M[i][j] += value
+
+    return self
+
+

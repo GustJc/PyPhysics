@@ -24,8 +24,8 @@ class App():
     self._running = True
     self._display_surf = None
     self.size = self.width, self.weight = 640, 480
-    self.angle = 45.0
-    self.initial_speed = 350.0
+    self.angle = 65.0
+    self.initial_speed = 450.0
     self.ball_sprite = None
     self.counter = 0
     self.dot_delay = 0.1
@@ -104,9 +104,9 @@ class App():
         global show_text
         show_text = not show_text
       elif event.key == pygame.K_a:
-        self.angle += 20
+        self.angle += 5
       elif event.key == pygame.K_d:
-        self.angle -= 20
+        self.angle -= 5
       
       elif event.key == pygame.K_w:
         self.initial_speed+=10
@@ -141,6 +141,8 @@ class App():
           self.active = True
           vec = vector2(self.initial_speed * math.cos(math.radians(self.angle)), self.initial_speed * -math.sin(math.radians(self.angle)))
           self.ball_sprite.body.speed += vec
+          self.ball_sprite.body.mass = self.mass
+          self.ball_sprite.K = self.K
         else:
           self.active = False
           self.changeBalls()
